@@ -173,18 +173,6 @@ class LRM:
         Q, R = np.linalg.qr(VX, mode='reduced')  # Reduced mode for efficiency
         b = np.linalg.solve(R, Q.T@VY)  # Regression coefficients
 
-        print(f"Let's check intermediate matrices")
-      
-        # print(f"These are the shapes of Q {Q.shape} and R {R.shape}")
-        # print(np.sum(Q, axis=0))
-        # print(np.sum(R, axis=0))
-        # print(R)
-        # print(f"A vs VX")
-        # print(A[0:3, 0:3])
-        # print(VX[0:3, 0:3])
-        # print(R)
-        #print(f"This is beta: {b}")
-
         # Weighted residuals
         residuals = Y - X @ b
     
@@ -193,11 +181,6 @@ class LRM:
 
         residuals_weighted = W[:, np.newaxis] * residuals
         sigma = (residuals_weighted.T @ residuals) / df
-
-        #print(f"This is sigma: {sigma}")
-        #sigma = np.sum(residuals_weighted ** 2, axis=0) / df
-        #sigma = np.maximum(sigma, self.minvar)
-        #sigma /= df
 
         # Return regression coefficients vector and vartiance
         return b, sigma
@@ -244,7 +227,6 @@ class LRM:
         Pik = np.random.exponential(mu, (n, self.K))
         #Pik = self.Pik_test
         Pik /= np.sum(Pik, axis=1, keepdims=True) # Normalization of each row -> probabilities
-        #print(np.sum(Pik, axis=0))
 
         return Pik
 
@@ -293,8 +275,6 @@ class LRM:
             raise ValueError("The first dimensions of K must be different from the number of data points")
 
         self.Alpha = np.sum(self.Pik, axis=0) / N 
-        #print('This is Alpha:')
-        #print(self.Alpha)
         
         # Initialize Mu and Sigma arrays (allocate memory)
         d1 = X.shape[1]
@@ -307,8 +287,6 @@ class LRM:
             self.mu[:, :, k], self.sigma[:, :, k] = self._weighted_least_squares(k)
             # apply twice np.diag to obtain a diagonal matrix (extra-diag elements assumed to be 0)
             self.sigma[:, :, k] = np.diag(np.diag(self.sigma[:, :, k])) 
-        #print('DiagSigma')
-        #print(self.sigma)
 
     def _check_minvar(self):
         '''
@@ -333,9 +311,6 @@ class LRM:
             for i in range(D):
                 if mask[i]:
                     self.sigma[i, i, k] = self.minvar  # Set the diagonal element to minvar
-
-        #print("Sub-minvar values changed")
-        
         
     def _calc_like(self):
         """
