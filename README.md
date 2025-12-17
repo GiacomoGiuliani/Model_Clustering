@@ -11,6 +11,7 @@ This implementation follows the methodology described in Camargo et al. (2007, 2
 The core script in this repository is:
 
 - **`LRM2.py`** — performs model-based clustering of tropical cyclone tracks using polynomial regression models.
+- **`model_run.py`** — is an example function that runs the clustering algorithm with different initializations
 
 ---
 
